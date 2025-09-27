@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎰 Casino Ruleta Justa</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="confetti"></div>
+
+  <header>
+    <div class="header-content">
+      <h1>🎰 CASINO RULETA</h1>
+      <div class="header-actions">
+        <input type="text" id="newParticipant" placeholder="Nombre del participante" maxlength="20" />
+        <button id="addBtn">➕ Agregar</button>
+        <button id="toggleList">📋 Participantes</button>
+      </div>
+    </div>
+    <div class="participants-mini" id="miniList"></div>
+  </header>
+
+  <main>
+    <aside class="participants-list" id="fullList"></aside>
+
+    <div class="roulette-container">
+      <div class="arrow"></div>
+      <div class="roulette" id="roulette">
+        <div class="roulette-center">
+          <img src="foto.png" alt="Taurus" />
+        </div>
+      </div>
+      <div id="probabilidad"></div>
+      <button id="spinBtn">¡GIRAR!</button>
+      <div id="winnerDisplay">¿Quién ganará?</div>
+      <aside class="winners-list" id="winnersList"></aside>
+    </div>
+  </main>
+
+  <!-- Sonidos -->
+  <audio id="spinSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
+  <audio id="stopSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
+  <audio id="winSound" src="https://www.soundjay.com/misc/sounds/carnival-bell-01.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
