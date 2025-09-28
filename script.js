@@ -3,7 +3,6 @@ let winners = [];
 let isSpinning = false;
 let currentRotation = 0;
 
-// Elementos
 const newParticipantInput = document.getElementById('newParticipant');
 const addBtn = document.getElementById('addBtn');
 const toggleListBtn = document.getElementById('toggleList');
@@ -13,13 +12,9 @@ const spinBtn = document.getElementById('spinBtn');
 const roulette = document.getElementById('roulette');
 const winnerDisplay = document.getElementById('winnerDisplay');
 const winnersList = document.getElementById('winnersList');
-
-// Sonidos
 const spinSound = document.getElementById('spinSound');
 const stopSound = document.getElementById('stopSound');
 const winSound = document.getElementById('winSound');
-
-// Agregar participante
 addBtn.addEventListener('click', addParticipant);
 newParticipantInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') addParticipant();
@@ -39,9 +34,7 @@ function addParticipant() {
   updateProbabilidad();
 }
 
-// Renderizar listas
 function renderLists() {
-  // Participantes
   const listHTML = participants.length
     ? `<ul>${participants.map((p, i) =>
         `<li>
@@ -54,12 +47,10 @@ function renderLists() {
   miniList.innerHTML = listHTML;
   fullList.innerHTML = listHTML;
 
-  // Ganadores
   winnersList.innerHTML = winners.length
     ? `<h3>Ganadores</h3><ul>${winners.map(w => `<li>${w}</li>`).join('')}</ul>`
     : '<h3>Ganadores</h3><p>Aún no hay ganadores</p>';
 
-  // Botones eliminar
   document.querySelectorAll('.remove-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const index = parseInt(e.target.dataset.index);
@@ -71,25 +62,22 @@ function renderLists() {
   });
 }
 
-// Alternar lista mini
 toggleListBtn.addEventListener('click', () => {
   miniList.classList.toggle('show');
 });
 
-// Construir ruleta (centrado y orientado)
 function buildRoulette() {
-  // Fondo de segmentos con conic-gradient
+  document.querySelectorAll('.roulette-label').forEach(e => e.remove());
+
   if (participants.length === 0) {
     roulette.style.background = '#181818';
-    roulette.innerHTML = `<div class="roulette-center">
-      <img src="foto.png" alt="Taurus" />
-    </div>`;
+    if (!roulette.querySelector('.roulette-center')) {
+      roulette.innerHTML = `<div class="roulette-center"><img src="foto.png" alt="Taurus" /></div>`;
+    }
     return;
   }
 
-  // Tamaño adaptable
-  const baseSize = roulette.offsetWidth || 500;
-  // 1. Fondo de segmentos con conic-gradient
+  const baseSize = roulette.offsetWidth;
   const colors = ['var(--gold-light)', 'var(--black)'];
   const segmentAngle = 360 / participants.length;
   let bg = [];
@@ -99,10 +87,8 @@ function buildRoulette() {
   }
   roulette.style.background = `conic-gradient(${bg.join(', ')})`;
 
-  // El centro de la ruleta (imagen o texto)
-  let center = document.querySelector('.roulette-center');
-  if (!center) {
-    center = document.createElement('div');
+  if (!roulette.querySelector('.roulette-center')) {
+    const center = document.createElement('div');
     center.className = 'roulette-center';
     const img = document.createElement('img');
     img.src = "foto.png";
@@ -111,11 +97,7 @@ function buildRoulette() {
     roulette.appendChild(center);
   }
 
-  // Elimina labels anteriores
-  document.querySelectorAll('.roulette-label').forEach(e => e.remove());
-
-  // 2. Posicionar nombres en círculo
-  const radius = baseSize * (participants.length > 40 ? 0.38 : 0.43);
+  const radius = baseSize * (participants.length > 40 ? 0.39 : 0.43);
   for (let i = 0; i < participants.length; i++) {
     const angleDeg = i * segmentAngle + segmentAngle / 2 - 90;
     const angleRad = angleDeg * Math.PI / 180;
@@ -129,15 +111,12 @@ function buildRoulette() {
     label.style.top = `calc(50% + ${y}px)`;
     label.style.transform = `translate(-50%, -50%) rotate(${angleDeg + 90}deg)`;
 
-    // Tamaño de fuente adaptativo
     let fontSize = Math.max(8, baseSize / 18 - participants.length * 0.13);
     label.style.fontSize = `${fontSize}px`;
 
     roulette.appendChild(label);
   }
 }
-
-// Mostrar probabilidad
 function updateProbabilidad() {
   const probDiv = document.getElementById('probabilidad');
   if (participants.length === 0) {
@@ -148,7 +127,6 @@ function updateProbabilidad() {
   probDiv.textContent = `Probabilidad de ganar: ${prob}% por participante`;
 }
 
-// Girar ruleta con aceleración y desaceleración
 spinBtn.addEventListener('click', spinRoulette);
 
 function spinRoulette() {
@@ -170,9 +148,7 @@ function spinRoulette() {
   const segmentAngle = 360 / participants.length;
   const winnerIndex = Math.floor(Math.random() * participants.length);
 
-  // Flecha arriba: 0°
   const winnerAngle = 0 - (winnerIndex * segmentAngle + segmentAngle / 2);
-
   const extraSpins = 6 + Math.floor(Math.random() * 3);
   const finalRotation = extraSpins * 360 + winnerAngle;
 
@@ -194,7 +170,6 @@ function spinRoulette() {
     let angle = initialRotation + change * eased;
     roulette.style.transform = `rotate(${angle}deg)`;
 
-    // Mantener el centro estático
     const center = document.querySelector('.roulette-center');
     if (center) {
       center.style.transform = `translate(-50%, -50%) rotate(${-angle}deg)`;
@@ -220,7 +195,6 @@ function spinRoulette() {
       winnerDisplay.innerHTML = `<span class="winner-anim">🎉 ¡GANADOR: ${winner}! 🎉</span>`;
       createConfetti();
 
-      // Mueve al ganador a la lista de ganadores y lo elimina de participantes
       winners.push(winner);
       participants.splice(winnerIndex, 1);
       renderLists();
@@ -237,7 +211,6 @@ function spinRoulette() {
   requestAnimationFrame(animateSpin);
 }
 
-// Confeti (simple)
 function createConfetti() {
   const confetti = document.getElementById('confetti');
   confetti.innerHTML = '';
@@ -248,7 +221,7 @@ function createConfetti() {
     div.style.top = Math.random() * 100 + 'vh';
     div.style.width = '10px';
     div.style.height = '10px';
-    div.style.background = `hsl(${Math.random()*60+40},90%,60%)`; // tonos dorados
+    div.style.background = `hsl(${Math.random()*60+40},90%,60%)`;
     div.style.opacity = 0.8;
     div.style.borderRadius = '50%';
     div.style.pointerEvents = 'none';
@@ -259,7 +232,6 @@ function createConfetti() {
   setTimeout(() => { confetti.innerHTML = ''; }, 1800);
 }
 
-// Confeti animación CSS
 const style = document.createElement('style');
 style.innerHTML = `
 @keyframes confetti-fall {
@@ -268,12 +240,10 @@ style.innerHTML = `
 }`;
 document.head.appendChild(style);
 
-// Inicial
 renderLists();
 buildRoulette();
 updateProbabilidad();
 
-// Responsive: reconstruir ruleta al redimensionar
 window.addEventListener('resize', () => {
   buildRoulette();
 });
