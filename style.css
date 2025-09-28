@@ -1,4 +1,3 @@
-/* --- Variables y reset --- */
 * {
   margin: 0;
   padding: 0;
@@ -20,15 +19,6 @@ body {
   min-height: 100vh;
 }
 
-main {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  padding: 2rem 0;
-}
-
-/* --- Confeti --- */
 #confetti {
   position: fixed;
   pointer-events: none;
@@ -36,7 +26,6 @@ main {
   top: 0; left: 0; width: 100vw; height: 100vh;
 }
 
-/* --- Header --- */
 header {
   width: 100vw;
   background: #1a1a1a;
@@ -66,6 +55,7 @@ header {
   display: flex;
   gap: 0.7rem;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
 
@@ -137,23 +127,25 @@ button:disabled {
   to { opacity: 1; transform: translateY(0);}
 }
 
-/* --- Main layout --- */
 main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 2rem 0;
   width: 100vw;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .participants-list {
-  width: 500px;
-  min-height: 500px;
+  width: 320px;
   background: rgba(24, 24, 24, 0.95);
   border-radius: 18px;
   border: 3px solid var(--gold);
   box-shadow: 0 0 20px var(--gold-light);
   padding: 1.5rem;
-  margin-bottom: 2rem;
-  color: var(--white);
+  color: var(--white);  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -185,7 +177,7 @@ main {
 }
 
 .winners-list {
-  width: 500px;
+  width: 100%;
   min-height: 80px;
   background: rgba(24, 24, 24, 0.98);
   border-radius: 18px;
@@ -214,7 +206,6 @@ main {
   border-bottom: 1px solid var(--gray);
 }
 
-/* --- Ruleta --- */
 .roulette-container {
   display: flex;
   flex-direction: column;
@@ -224,22 +215,18 @@ main {
 }
 
 .arrow {
-  /* 1. Aumentamos el tamaño y la convertimos en un bloque */
   width: 80px;
   height: 60px;
   position: absolute;
-  top: -15px; /* La posicionamos para que "flote" sobre la ruleta */
+  top: -15px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  /* 2. Usamos clip-path para darle una forma de flecha más estilizada */
   clip-path: polygon(50% 100%, 0 0, 100% 0);
-  /* 3. Le damos un degradado para un look metálico y 3D */
   background: linear-gradient(160deg, var(--gold-light) 30%, var(--gold) 70%);
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
 }
 
-/* Añadimos un borde interior para más detalle */
 .arrow::before {
   content: '';
   position: absolute;
@@ -248,17 +235,15 @@ main {
   right: 4px;
   bottom: 4px;
   background: transparent;
-  clip-path: inherit; /* Hereda la forma de la flecha */
+  clip-path: inherit;
   border: 3px solid rgba(0,0,0,0.2);
   z-index: 11;
 }
 
 .arrow.spinning {
-  /* 4. Nueva animación más sutil y elegante */
   animation: arrow-float 1.5s ease-in-out infinite;
 }
 
-/* Reemplazamos la animación 'arrow-pulse' por 'arrow-float' */
 @keyframes arrow-float {
   0% {
     transform: translateX(-50%) translateY(0);
@@ -273,14 +258,15 @@ main {
 }
 
 .roulette {
-  width: 500px;
-  height: 500px;
+  width: 90vw;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   border: 10px solid var(--gold);
   background: #181818;
   box-shadow: 0 0 60px var(--gold-light), 0 0 0 12px var(--black) inset;
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -314,8 +300,8 @@ main {
   width:100%;
   height: 90%;
   object-fit: cover;
-  border-radius: 50%;      /* Hace la imagen circular */
-  background: var(--gold); /* Fondo dorado si la imagen es cuadrada */
+  border-radius: 50%;
+  background: var(--gold);
   box-shadow: 0 0 12px var(--gold-light);
   display: block;
 }
@@ -398,37 +384,25 @@ main {
   text-shadow: 0 0 20px var(--gold-light), 0 0 8px #fff;
 }
 
-/* Responsive */
-@media (max-width: 1100px) {
+@media (max-width: 960px) {
   main {
     flex-direction: column;
     align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
   }
-  .participants-list, .winners-list, .roulette, .roulette-container {
-    width: 95vw !important;
-    min-width: 0 !important;
-    max-width: 98vw !important;
+  .participants-list, .winners-list {
+    width: 90vw;
+    max-width: 500px;
   }
-  .roulette, .participants-list {
-    min-height: 320px !important;
-    height: 320px !important;
-    width: 320px !important;
+  .participants-list {
+    min-height: 250px;
+    order: 3;
+  }
+  .roulette-container {
+    order: 1;
   }
   .winners-list {
-    width: 320px !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .roulette, .participants-list, .winners-list {
-    width: 98vw !important;
-    min-width: 0 !important;
-    max-width: 99vw !important;
-    height: 220px !important;
-    min-height: 220px !important;
-  }
-  .roulette-center {
-    width: 40% !important;
-    height: 40% !important;
+    order: 2;
   }
 }
